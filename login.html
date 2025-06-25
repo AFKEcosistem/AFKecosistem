@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AFK — Reconócete</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #fef9f4, #eaf4ff, #f1ffe7);
+      background-size: 400% 400%;
+      animation: fondoAlma 30s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    @keyframes fondoAlma {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 { font-size: 2.5rem; margin-bottom: 0.2rem; }
+    p { font-size: 1.1rem; color: #555; margin-bottom: 2rem; }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      min-width: 280px;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      background-color: #4a90e2;
+      color: white;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover { background-color: #3a6fb8; }
+  </style>
+</head>
+<body>
+  <h1>Reconócete</h1>
+  <p>AFK | Aquí no te registras. Te revelas.</p>
+
+  <div class="login-container">
+    <input type="email" id="correo" placeholder="Tu correo sagrado" />
+    <input type="password" id="clave" placeholder="Contraseña sagrada" />
+    <button onclick="ingresar()">Entrar</button>
+    <button onclick="registrar()">Registrarme</button>
+  </div>
+
+  <script type="module">
+    import { auth } from './config/firebase-init.js';
+    import {
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    async function ingresar() {
+      const correo = document.getElementById('correo').value;
+      const clave = document.getElementById('clave').value;
+      try {
+        await signInWithEmailAndPassword(auth, correo, clave);
+        alert("Bienvenido de nuevo 🌱");
+        window.location.href = "roles.html";
+      } catch (error) {
+        alert("⚠️ No te reconocimos: " + error.message);
+      }
+    }
+
+    async function registrar() {
+      const correo = document.getElementById('correo').value;
+      const clave = document.getElementById('clave').value;
+      try {
+        await createUserWithEmailAndPassword(auth, correo, clave);
+        alert("Te has revelado. Bienvenido ✨");
+        window.location.href = "roles.html";
+      } catch (error) {
+        alert("⚠️ No pudimos revelarte: " + error.message);
+      }
+    }
+
+    window.ingresar = ingresar;
+    window.registrar = registrar;
+  </script>
+</body>
+</html>
